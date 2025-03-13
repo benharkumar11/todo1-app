@@ -1,0 +1,116 @@
+/* ✅ Modal Background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ✅ Modal Box */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px; /* Ensure a fixed width */
+  max-width: 100%; /* Prevent overflow */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* ✅ Modal Header: Title & Close Button */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* ✅ Modal Body */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ✅ Subtitle */
+.modal-subtitle {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+/* ✅ Title Input */
+.input-container {
+  width: 100%;
+}
+
+.task-input {
+  width: calc(100% - 2px); /* Ensure it doesn't overflow */
+  padding: 8px; /* Reduce padding */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+/* ✅ Dropdowns Side by Side */
+.dropdown-container {
+  display: flex;
+  gap: 10px;
+}
+
+.task-dropdown {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* ✅ Full-Width Save Button */
+.save-btn {
+  width: 100%;
+  background: #198754;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  margin-top: 10px;
+}
+/* ✅ Align checkboxes */
+.task-table input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* ✅ Improve spacing */
+.task-table td {
+  padding: 10px;
+  text-align: left;
+}
+
+/* ✅ Bulk Delete Button - Disabled State */
+.bulk-delete-btn:disabled {
+  background: white;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
