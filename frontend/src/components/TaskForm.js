@@ -1,10 +1,25 @@
-import React, { useState } from "react";
-import "./styles.css";
+import React, { useState, useEffect } from "react";
+import "./TaskForm.css";
 
-const TaskForm = ({ onClose, onSave }) => {
+const TaskForm = ({ onClose, onSave, task }) => {
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("Not Started");
-  const [priority, setPriority] = useState("Low");
+  const [priority, setPriority] = useState("None");
+  const [loading, setLoading] = useState(false);
+  const [changesMade, setChangesMade] = useState(false);
+
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setStatus(task.status);
+      setPriority(task.priority);
+    }
+  }, [task]);
+
+  const handleInputChange = (setter) => (e) => {
+    setter(e.target.value);
+    setChangesMade(true);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,18 +28,18 @@ const TaskForm = ({ onClose, onSave }) => {
       return;
     }
 
-    const newTask = { title, status, priority };
+    const newTask = task
+      ? { ...task, title, status, priority }
+      : { title, status, priority };
 
+    setLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/todos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTask),
-      });
-      const createdTask = await response.json();
-      onSave(createdTask);
+      await onSave(newTask);
+      setLoading(false);
+      setChangesMade(false);
       onClose();
     } catch (error) {
+      setLoading(false);
       console.error("Error saving task:", error);
     }
   };
@@ -33,48 +48,67 @@ const TaskForm = ({ onClose, onSave }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">Create Task</h2>
+          <h2 className="modal-title">{task ? "Edit Task" : "Create Task"}</h2>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>
         </div>
 
         <div className="modal-body">
-          <p className="modal-subtitle">Create a new task.</p>
+          <p className="modal-subtitle">
+            {task ? "Edit your task details" : "Create a new task."}
+          </p>
 
+          {/* ✅ Label for Title */}
+          <label className="label">Title</label>
           <input
             type="text"
             placeholder="Enter task title"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleInputChange(setTitle)}
             className="task-input"
             required
           />
 
           <div className="dropdown-container">
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="task-dropdown"
-            >
-              <option value="Not Started">Not Started</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
+            {/* ✅ Label for Status */}
+            <div className="dropdown-item">
+              <label className="label">Status</label>
+              <select
+                value={status}
+                onChange={handleInputChange(setStatus)}
+                className="task-dropdown"
+              >
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
 
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="task-dropdown"
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
+            {/* ✅ Label for Priority */}
+            <div className="dropdown-item">
+              <label className="label">Priority</label>
+              <select
+                value={priority}
+                onChange={handleInputChange(setPriority)}
+                className="task-dropdown"
+              >
+                <option value="None">None</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
           </div>
 
-          <button type="submit" className="save-btn" onClick={handleSubmit}>
-            Save
+          <button
+            type="submit"
+            className="save-btn"
+            onClick={handleSubmit}
+            disabled={loading || !changesMade}
+          >
+            {loading ? "Saving..." : task ? "Update Task" : "Save"}
           </button>
         </div>
       </div>

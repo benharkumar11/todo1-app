@@ -30,20 +30,40 @@ app.get("/api/todos", (req, res) => {
 app.post("/api/todos", (req, res) => {
   const { title, status, priority } = req.body;
 
-  if (!title || title.trim() === "") {
-    return res.status(400).json({ error: "Title is required" });
+  // Check if a task with the same title already exists
+  const existingTask = tasks.find((task) => task.title === title);
+  if (existingTask) {
+    return res
+      .status(409)
+      .json({ error: "Task already exists! Please enter a unique task." });
   }
 
-  const taskExists = tasks.some((task) => task.title === title);
-  if (taskExists) {
-    return res.status(409).json({ error: "Task already exists" });
-  }
+  const newTask = {
+    id: Date.now(),
+    title,
+    status,
+    priority,
+  };
 
-  const newTask = { id: Date.now(), title, status, priority };
   tasks.push(newTask);
-  saveTasks(); // 🛠 Save to file
-
   res.status(201).json(newTask);
+});
+
+app.put("/api/todos/:id", (req, res) => {
+  const taskId = Number(req.params.id);
+  const { title, status, priority } = req.body;
+
+  const taskIndex = tasks.findIndex((task) => task.id === taskId);
+  if (taskIndex === -1) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  // Update task fields
+  if (title !== undefined) tasks[taskIndex].title = title;
+  if (status !== undefined) tasks[taskIndex].status = status;
+  if (priority !== undefined) tasks[taskIndex].priority = priority;
+
+  res.json(tasks[taskIndex]); // Send updated task
 });
 
 // ✅ API: Delete Task

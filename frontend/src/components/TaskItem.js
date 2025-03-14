@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.css";
 
-const TaskItem = ({ task, isSelected, onCheckboxChange, onDelete }) => {
+const TaskItem = ({ task, isSelected, onCheckboxChange, onEdit }) => {
   return (
     <tr className="task-row">
       <td>
@@ -11,30 +11,24 @@ const TaskItem = ({ task, isSelected, onCheckboxChange, onDelete }) => {
           onChange={() => onCheckboxChange(task.id)}
         />
       </td>
-      <td>{task.title || "Untitled Task"}</td>
+      <td>{task.title}</td>
       <td>
         <span
-          className={`status-badge ${
-            task.status
-              ? task.status.toLowerCase().replace(" ", "-")
-              : "not-started"
-          }`}
+          className={`status-badge ${task.status
+            .toLowerCase()
+            .replace(" ", "-")}`}
         >
-          {task.status || "Not Started"}
+          {task.status}
         </span>
       </td>
       <td>
-        <span
-          className={`priority-badge ${
-            task.priority ? task.priority.toLowerCase() : "low"
-          }`}
-        >
-          {task.priority || "Low"}
+        <span className={`priority-badge ${task.priority.toLowerCase()}`}>
+          {task.priority}
         </span>
       </td>
       <td>
-        <button className="delete-btn" onClick={() => onDelete(task.id)}>
-          🗑
+        <button className="edit-btn" onClick={() => onEdit(task)}>
+          ✏️ Edit
         </button>
       </td>
     </tr>

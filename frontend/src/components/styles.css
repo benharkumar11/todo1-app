@@ -1,116 +1,75 @@
-/* ✅ Modal Background */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ✅ Modal Box */
-.modal-content {
-  background: white;
+/* ✅ Page Container */
+.page-container {
+  width: 98%;
+  margin: auto;
   padding: 20px;
-  border-radius: 8px;
-  width: 400px; /* Ensure a fixed width */
-  max-width: 100%; /* Prevent overflow */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
 }
 
-/* ✅ Modal Header: Title & Close Button */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* ✅ Table Styling */
+.task-table-container {
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.modal-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-/* ✅ Modal Body */
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* ✅ Subtitle */
-.modal-subtitle {
-  font-size: 14px;
-  color: gray;
-  margin-bottom: 10px;
-}
-
-/* ✅ Title Input */
-.input-container {
+.task-table {
   width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
 }
 
-.task-input {
-  width: calc(100% - 2px); /* Ensure it doesn't overflow */
-  padding: 8px; /* Reduce padding */
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-  box-sizing: border-box; /* Ensures padding is included in width */
+.task-table th,
+.task-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-/* ✅ Dropdowns Side by Side */
-.dropdown-container {
+.task-table th {
+  background-color: #f4f4f4;
+}
+
+/* ✅ Bulk Delete & Create Buttons */
+.top-buttons {
   display: flex;
   gap: 10px;
 }
 
-.task-dropdown {
-  flex: 1;
+.bulk-delete-btn,
+.create-task-btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bulk-delete-btn {
+  background: #d9534f;
+  color: white;
+}
+
+.bulk-delete-btn:disabled {
+  cursor: not-allowed;
+}
+
+.create-task-btn {
+  background: #0275d8;
+  color: white;
+}
+
+.create-task-btn:hover {
+  background: #025aa5;
+}
+.search-bar {
+  width: 250px;
   padding: 8px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
 }
 
-/* ✅ Full-Width Save Button */
-.save-btn {
-  width: 100%;
-  background: #198754;
-  color: white;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  margin-top: 10px;
-}
-/* ✅ Align checkboxes */
-.task-table input[type="checkbox"] {
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-/* ✅ Improve spacing */
-.task-table td {
-  padding: 10px;
-  text-align: left;
-}
-
-/* ✅ Bulk Delete Button - Disabled State */
-.bulk-delete-btn:disabled {
-  background: white;
-  cursor: not-allowed;
-  opacity: 0.5;
+.search-bar:focus {
+  border-color: #007bff;
 }
