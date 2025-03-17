@@ -4,6 +4,7 @@ import Filters from "./Filters";
 import TaskItem from "./TaskItem";
 import TaskForm from "./TaskForm";
 import KanbanBoard from "./KanbanBoard";
+import BulkActions from "./BulkActions";
 import "./styles.css";
 
 const TaskList = () => {
@@ -80,27 +81,6 @@ const TaskList = () => {
     );
   };
 
-  const handleBulkDelete = async () => {
-    try {
-      await Promise.all(
-        selectedTasks.map((taskId) =>
-          fetch(`http://localhost:3000/api/todos/${taskId}`, {
-            method: "DELETE",
-          })
-        )
-      );
-      setTasks(tasks.filter((task) => !selectedTasks.includes(task.id)));
-      setSelectedTasks([]);
-    } catch (error) {
-      console.error("Error deleting tasks:", error);
-    }
-  };
-
-  const handleFilterChange = (newStatus, newPriority) => {
-    setFilterStatus(newStatus);
-    setFilterPriority(newPriority);
-  };
-
   const handleSort = (key) => {
     const newDirection =
       sortKey === key && sortDirection === "asc" ? "desc" : "asc";
@@ -112,6 +92,7 @@ const TaskList = () => {
     setSearchQuery(query);
   };
 
+  // ✅ Apply Filtering Dynamically on Every Change
   const filteredTasks = tasks.filter((task) => {
     const matchesStatus =
       filterStatus === "ALL" || task.status === filterStatus;
@@ -123,6 +104,7 @@ const TaskList = () => {
     return matchesStatus && matchesPriority && matchesSearch;
   });
 
+  // ✅ Apply Sorting AFTER Filtering
   const sortedTasks = [...filteredTasks].sort((a, b) => {
     if (!sortKey) return 0;
     const valueA = a[sortKey] ? a[sortKey].toLowerCase() : "";
@@ -140,13 +122,11 @@ const TaskList = () => {
           <p className="page-subtitle">Manage all tasks.</p>
         </div>
         <div className="top-buttons">
-          <button
-            className="bulk-delete-btn"
-            onClick={handleBulkDelete}
-            disabled={selectedTasks.length === 0}
-          >
-            🗑
-          </button>
+          <BulkActions
+            selectedTasks={selectedTasks}
+            setSelectedTasks={setSelectedTasks}
+            setTasks={setTasks}
+          />
           <button
             className="create-task-btn"
             onClick={() => {
@@ -205,31 +185,10 @@ const TaskList = () => {
                     }
                   />
                 </th>
-                <th
-                  onClick={() => handleSort("title")}
-                  style={{ minWidth: "200px", textAlign: "left" }}
-                >
-                  Title{" "}
-                  {sortKey === "title" &&
-                    (sortDirection === "asc" ? "⬆️" : "⬇️")}
-                </th>
-                <th
-                  onClick={() => handleSort("status")}
-                  style={{ minWidth: "150px", textAlign: "left" }}
-                >
-                  Status{" "}
-                  {sortKey === "status" &&
-                    (sortDirection === "asc" ? "⬆️" : "⬇️")}
-                </th>
-                <th
-                  onClick={() => handleSort("priority")}
-                  style={{ minWidth: "150px", textAlign: "left" }}
-                >
-                  Priority{" "}
-                  {sortKey === "priority" &&
-                    (sortDirection === "asc" ? "⬆️" : "⬇️")}
-                </th>
-                <th style={{ width: "100px", textAlign: "center" }}>Actions</th>
+                <th onClick={() => handleSort("title")}>Title</th>
+                <th onClick={() => handleSort("status")}>Status</th>
+                <th onClick={() => handleSort("priority")}>Priority</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -245,9 +204,7 @@ const TaskList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" style={{ textAlign: "center" }}>
-                    No tasks found.
-                  </td>
+                  <td colSpan="5">No tasks found.</td>
                 </tr>
               )}
             </tbody>

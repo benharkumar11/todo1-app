@@ -14,7 +14,7 @@ const Filters = ({
         onChange={(e) => setFilterStatus(e.target.value)}
         className="filter-dropdown"
       >
-        <option value="ALL">All Status</option>
+        <option value="ALL">All Statuses</option>
         <option value="Not Started">Not Started</option>
         <option value="In Progress">In Progress</option>
         <option value="Completed">Completed</option>
